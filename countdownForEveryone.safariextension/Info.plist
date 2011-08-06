@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Author</key>
+	<string>Zhusee</string>
+	<key>Builder Version</key>
+	<string>7534.48.3</string>
+	<key>CFBundleDisplayName</key>
+	<string>全民倒數計時</string>
+	<key>CFBundleIdentifier</key>
+	<string>net.zhusee2.extensions.countdownforeveryone</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>Chrome</key>
+	<dict>
+		<key>Menus</key>
+		<array>
+			<dict>
+				<key>Identifier</key>
+				<string>menuCountdown</string>
+				<key>Menu Items</key>
+				<array>
+					<dict>
+						<key>Disabled</key>
+						<true/>
+						<key>Identifier</key>
+						<string>menuItemCDName</string>
+						<key>Title</key>
+						<string>倒數計時名稱</string>
+					</dict>
+					<dict>
+						<key>Disabled</key>
+						<true/>
+						<key>Identifier</key>
+						<string>menuItemCDDate</string>
+						<key>Title</key>
+						<string>2012/01/01</string>
+					</dict>
+					<dict>
+						<key>Disabled</key>
+						<true/>
+						<key>Identifier</key>
+						<string>menuItemCDTimeLeft</string>
+						<key>Title</key>
+						<string>剩下 123 天</string>
+					</dict>
+					<dict>
+						<key>Separator</key>
+						<true/>
+					</dict>
+					<dict>
+						<key>Command</key>
+						<string>viewInBrowser</string>
+						<key>Identifier</key>
+						<string>menuItemCDBrowser</string>
+						<key>Title</key>
+						<string>在瀏覽器中檢視</string>
+					</dict>
+					<dict>
+						<key>Identifier</key>
+						<string>menuItemOptions</string>
+						<key>Submenu</key>
+						<string>menuOptions</string>
+						<key>Title</key>
+						<string>選項</string>
+					</dict>
+				</array>
+			</dict>
+			<dict>
+				<key>Identifier</key>
+				<string>menuOptions</string>
+				<key>Menu Items</key>
+				<array>
+					<dict>
+						<key>Command</key>
+						<string>showBadgeOnToolbar</string>
+						<key>Identifier</key>
+						<string>menuItemOptionBadge</string>
+						<key>Title</key>
+						<string>在按鈕上顯示剩餘天數</string>
+					</dict>
+					<dict>
+						<key>Command</key>
+						<string>setNewCountdown</string>
+						<key>Identifier</key>
+						<string>menuItemOptionSetCountdown</string>
+						<key>Title</key>
+						<string>選擇其他倒數計時⋯</string>
+					</dict>
+				</array>
+			</dict>
+		</array>
+		<key>Toolbar Items</key>
+		<array>
+			<dict>
+				<key>Identifier</key>
+				<string>btnCountDown</string>
+				<key>Image</key>
+				<string>cdtimer.png</string>
+				<key>Label</key>
+				<string>全民倒數計時</string>
+				<key>Menu</key>
+				<string>menuCountdown</string>
+				<key>Palette Label</key>
+				<string>全民倒數計時</string>
+				<key>Tool Tip</key>
+				<string>倒數計時名稱 (剩 123 天)</string>
+			</dict>
+		</array>
+	</dict>
+	<key>Content</key>
+	<dict>
+		<key>Scripts</key>
+		<dict/>
+	</dict>
+	<key>Description</key>
+	<string>本延伸功能可將一「全民倒數計時器」上的倒數計時顯示於 Safari 的工具列按鈕上，以供快速查看。</string>
+	<key>ExtensionInfoDictionaryVersion</key>
+	<string>1.0</string>
+	<key>Permissions</key>
+	<dict>
+		<key>Website Access</key>
+		<dict/>
+	</dict>
+	<key>Update Manifest URL</key>
+	<string>http://github.com/zhusee2/countdownForEveryone/raw/master/update.plist</string>
+	<key>Website</key>
+	<string>http://github.com/zhusee2/countdownForEveryone</string>
+</dict>
+</plist>
