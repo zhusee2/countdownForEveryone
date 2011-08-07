@@ -13,9 +13,9 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>1.1</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>2</string>
 	<key>Chrome</key>
 	<dict>
 		<key>Global Page</key>
@@ -94,7 +94,7 @@
 						<key>Title</key>
 						<string>選擇其他倒數計時⋯</string>
 					</dict>
-          <dict>
+					<dict>
 						<key>Command</key>
 						<string>setCurrentCountdown</string>
 						<key>Identifier</key>
@@ -106,7 +106,7 @@
 						<key>Separator</key>
 						<true/>
 					</dict>
-          <dict>
+					<dict>
 						<key>Command</key>
 						<string>removeCountdown</string>
 						<key>Identifier</key>
