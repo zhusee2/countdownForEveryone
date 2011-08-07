@@ -138,7 +138,7 @@ var CDFE = {
     }
 
     var result = {
-      days: Math.floor(diff.getTime() / 86400000), // 24hr*60min*60sec*1000ms
+      days: Math.floor((diff.getTime() + 28800000) / 86400000), // 24hr*60min*60sec*1000ms
       hours: diff.getHours(),
       minutes: diff.getMinutes(),
       seconds: diff.getSeconds(),
