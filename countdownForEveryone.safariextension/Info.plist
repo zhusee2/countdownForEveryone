@@ -94,6 +94,18 @@
 						<key>Title</key>
 						<string>選擇其他倒數計時⋯</string>
 					</dict>
+					<dict>
+						<key>Separator</key>
+						<true/>
+					</dict>
+          <dict>
+						<key>Command</key>
+						<string>removeCountdown</string>
+						<key>Identifier</key>
+						<string>menuItemOptionRemoveCountdown</string>
+						<key>Title</key>
+						<string>移除倒數計時</string>
+					</dict>
 				</array>
 			</dict>
 		</array>

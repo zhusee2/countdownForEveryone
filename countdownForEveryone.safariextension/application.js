@@ -78,6 +78,9 @@ function commandHandler(event) {
   if (event.command === 'showBadgeOnToolbar') {
     safari.extension.settings.showBadge = !safari.extension.settings.showBadge;
   }
+  if (event.command === 'removeCountdown') {
+    safari.extension.settings.countdownData = null;
+  }
 }
 
 function settingsChangEventHandler(event) {
