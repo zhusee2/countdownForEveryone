@@ -94,6 +94,14 @@
 						<key>Title</key>
 						<string>選擇其他倒數計時⋯</string>
 					</dict>
+          <dict>
+						<key>Command</key>
+						<string>setCurrentCountdown</string>
+						<key>Identifier</key>
+						<string>menuItemOptionSetCurrentCountdown</string>
+						<key>Title</key>
+						<string>使用本頁的倒數計時</string>
+					</dict>
 					<dict>
 						<key>Separator</key>
 						<true/>

@@ -2,6 +2,8 @@
  * CountdownForEveryone Safari Extension
  * 2011(c) Zhusee (https://github.com/zhusee2/)
  */
+
+const CDPAGEPATTERN = /^http:\/\/timer.hugojay.com\/counter.php\?.*id=([^\&]+)/;
  
 safari.application.addEventListener('validate', validationHandler, false);
 safari.application.addEventListener('menu', menuValidator, false);
@@ -40,12 +42,16 @@ function validationHandler(event) {
 }
 
 function menuValidator(event) {
+  //在倒數計時器頁面增加自動設定選項
+  var cdPageMatch = safari.application.activeBrowserWindow.activeTab.url.match(CDPAGEPATTERN);
+
   if (event.target.identifier === 'menuCountdown') {
     if (safari.extension.settings.countdownData) {
       event.target.menuItems[0].title = CDFE.getName();
       event.target.insertMenuItem(1, 'menuItemCDDate', CDFE.getArrivalDate());
       event.target.insertMenuItem(2, 'menuItemCDTimeLeft', CDFE.getTimeLeftStringFull());
       event.target.removeMenuItem(CDFE.utility.getMenuItemIndex('menuItemSetCountdown'));
+      event.target.removeMenuItem(CDFE.utility.getMenuItemIndex('menuItemSetCurrentCountdown'));
       event.target.menuItems[1].disabled = true;
       event.target.menuItems[2].disabled = true;
       event.target.menuItems[4].disabled = false;
@@ -54,6 +60,18 @@ function menuValidator(event) {
       event.target.removeMenuItem(CDFE.utility.getMenuItemIndex('menuItemCDTimeLeft'));
       event.target.menuItems[CDFE.utility.getMenuItemIndex('menuItemCDBrowser')].disabled = true;
       event.target.insertMenuItem(1, 'menuItemSetCountdown', '設定倒數計時⋯', 'setNewCountdown');
+      if (cdPageMatch) {
+        event.target.insertMenuItem(2, 'menuItemSetCurrentCountdown', '使用本頁的倒數計時', 'setCurrentCountdown');
+      } else {
+        event.target.removeMenuItem(CDFE.utility.getMenuItemIndex('menuItemSetCurrentCountdown'));
+      }
+    }
+  }
+  if (event.target.identifier === 'menuOptions') {
+    if (cdPageMatch) {
+      event.target.menuItems[2].disabled = false;
+    } else {
+      event.target.menuItems[2].disabled = true;
     }
   }
 }
@@ -61,7 +79,7 @@ function menuValidator(event) {
 function commandHandler(event) {
   if (event.command === 'setNewCountdown') {
     var url = prompt('請輸入您要使用的全民倒數計時器網址：', '範例：http://timer.hugojay.com/counter.php?id=Rvc'),
-        match = url.match(/^http:\/\/timer.hugojay.com\/counter.php\?.*id=([^\&]+)/);
+        match = url.match(CDPAGEPATTERN);
     
     if (url) {
       if (match) {
@@ -71,6 +89,19 @@ function commandHandler(event) {
       }
     }
   }
+  if (event.command === 'setCurrentCountdown') {
+    var url = safari.application.activeBrowserWindow.activeTab.url,
+        match = url.match(CDPAGEPATTERN);
+    
+    if (url) {
+      if (match) {
+        CDFE.setCountdown(match[1]);
+      } else {
+        alert('設定失敗，請改使用手動輸入設定。')
+      }
+    }
+  }
+
   if (event.command === 'viewInBrowser') {
     var url = 'http://timer.hugojay.com/counter.php?id=' + CDFE.getCountdown().id;
     safari.application.activeBrowserWindow.openTab().url = url;
