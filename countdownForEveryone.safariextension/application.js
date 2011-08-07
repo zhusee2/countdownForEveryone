@@ -151,7 +151,12 @@ var CDFE = {
   },
   setCountdown: function setCountdown(id) {
     $.post('http://timer.hugojay.com/ajax/cdtimer.php', {id: id}, function(data) {
-      safari.extension.settings.countdownData = data;
+      if (JSON.parse(data).response == 1) {
+        safari.extension.settings.countdownData = data;
+      } else {
+        alert('找不到指定的倒數計時器，請檢查ID後再試一次。');
+        return false;
+      }
     });
   }
 };
