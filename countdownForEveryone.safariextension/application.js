@@ -12,8 +12,8 @@ function validationHandler(event) {
   switch (event.command) {
     case 'btnCountDown':
       if (safari.extension.settings.countdownData) {
-        event.target.toolTip = CDFE.getName() + ' (剩下 ' + CDFE.getTimeLeftString() + ')';
-        if (safari.extension.settings.showBadge) {
+        event.target.toolTip = CDFE.getName() + ' (' + CDFE.getTimeLeftString() + ')';
+        if (safari.extension.settings.showBadge && !CDFE.getTimeLeftObj().expire) {
           event.target.badge = CDFE.getDaysForBadge();
         } else {
           event.target.badge = 0;
@@ -44,7 +44,7 @@ function menuValidator(event) {
     if (safari.extension.settings.countdownData) {
       event.target.menuItems[0].title = CDFE.getName();
       event.target.insertMenuItem(1, 'menuItemCDDate', CDFE.getArrivalDate());
-      event.target.insertMenuItem(2, 'menuItemCDTimeLeft', '剩下 ' + CDFE.getTimeLeftStringFull());
+      event.target.insertMenuItem(2, 'menuItemCDTimeLeft', CDFE.getTimeLeftStringFull());
       event.target.removeMenuItem(CDFE.utility.getMenuItemIndex('menuItemSetCountdown'));
       event.target.menuItems[1].disabled = true;
       event.target.menuItems[2].disabled = true;
@@ -96,16 +96,22 @@ var CDFE = {
   getArrivalDate: function getArrivalDate() {
     return this.getCountdown().date;
   },
-  getTimeLeftObj: function getTimeLeftStringFull() {
+  getTimeLeftObj: function getTimeLeftObj() {
     var now = new Date(),
         targetDate = new Date(this.getCountdown().date + ' GMT+0800'),
-        diff = new Date(targetDate - now - 28800000);
+        diff = new Date(targetDate - now - 28800000), flagExpire = false;
+        
+    if (diff < 0) {
+      diff = new Date(now - targetDate - 28800000);
+      flagExpire = true;
+    }
 
     var result = {
       days: Math.floor(diff.getTime() / 86400000), // 24hr*60min*60sec*1000ms
       hours: diff.getHours(),
       minutes: diff.getMinutes(),
-      seconds: diff.getSeconds()
+      seconds: diff.getSeconds(),
+      expire: flagExpire
     };
     
     return result;
@@ -118,7 +124,7 @@ var CDFE = {
     if (timeLeft.minutes) string += timeLeft.minutes + ':';
     if (timeLeft.seconds) string += timeLeft.seconds;
     
-    return string;
+    return (timeLeft.expire ? '已過 ' : '剩下 ' ) + string;
   },
   getTimeLeftStringFull: function getTimeLeftStringFull() {
     var timeLeft = CDFE.getTimeLeftObj(), stringArray = [];
@@ -128,7 +134,7 @@ var CDFE = {
     if (timeLeft.minutes) stringArray.push(timeLeft.minutes, '分');
     if (timeLeft.seconds) stringArray.push(timeLeft.seconds, '秒');
     
-    return stringArray.join(' ');
+    return (timeLeft.expire ? '已過 ' : '剩下 ' ) + stringArray.join(' ');
   },
   getDaysForBadge: function getDaysForBadge() {
     var timeLeft = this.getTimeLeftObj();
