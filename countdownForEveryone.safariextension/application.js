@@ -5,18 +5,24 @@
  
 safari.application.addEventListener('validate', validationHandler, false);
 safari.application.addEventListener('menu', menuValidator, false);
+safari.application.addEventListener('command', commandHandler, false);
+safari.extension.settings.addEventListener('change', settingsChangEventHandler, false);
  
 function validationHandler(event) {
   switch (event.command) {
     case 'btnCountDown':
       if (safari.extension.settings.countdownData) {
         event.target.toolTip = CDFE.getName() + ' (剩下 ' + CDFE.getTimeLeftString() + ')';
+        if (safari.extension.settings.showBadge) {
+          event.target.badge = CDFE.getDaysForBadge();
+        } else {
+          event.target.badge = 0;
+        }
       } else {
         event.target.toolTip = '全民倒數計時器 (未設定)';
+        event.target.badge = 0;
       }
-      if (safari.extension.settings.showBadge) {
-        event.target.badge = CDFE.getDaysForBadge();
-      }
+      
       break;
     case 'menuItemCDName':
       if (safari.extension.settings.countdownData) {
@@ -26,7 +32,7 @@ function validationHandler(event) {
       }
       break;
     case 'showBadgeOnToolbar':
-      console.log(event);
+      event.target.checkedState = safari.extension.settings.showBadge || 0;
       break;
     default:
       break;
@@ -39,12 +45,44 @@ function menuValidator(event) {
       event.target.menuItems[0].title = CDFE.getName();
       event.target.insertMenuItem(1, 'menuItemCDDate', CDFE.getArrivalDate());
       event.target.insertMenuItem(2, 'menuItemCDTimeLeft', '剩下 ' + CDFE.getTimeLeftStringFull());
+      event.target.removeMenuItem(CDFE.utility.getMenuItemIndex('menuItemSetCountdown'));
       event.target.menuItems[1].disabled = true;
       event.target.menuItems[2].disabled = true;
+      event.target.menuItems[4].disabled = false;
     } else {
       event.target.removeMenuItem(CDFE.utility.getMenuItemIndex('menuItemCDDate'));
       event.target.removeMenuItem(CDFE.utility.getMenuItemIndex('menuItemCDTimeLeft'));
+      event.target.menuItems[CDFE.utility.getMenuItemIndex('menuItemCDBrowser')].disabled = true;
+      event.target.insertMenuItem(1, 'menuItemSetCountdown', '設定倒數計時⋯', 'setNewCountdown');
     }
+  }
+}
+
+function commandHandler(event) {
+  if (event.command === 'setNewCountdown') {
+    var url = prompt('請輸入您要使用的全民倒數計時器網址：', '範例：http://timer.hugojay.com/counter.php?id=Rvc'),
+        match = url.match(/^http:\/\/timer.hugojay.com\/counter.php\?.*id=([^\&]+)/);
+    
+    if (url) {
+      if (match) {
+        CDFE.setCountdown(match[1]);
+      } else {
+        alert('您輸入的格式錯誤，請檢查後再試一次。\n\n建議您開啟您要使用的全民倒數計時器網頁，並直接將網址複製後再回來貼上。')
+      }
+    }
+  }
+  if (event.command === 'viewInBrowser') {
+    var url = 'http://timer.hugojay.com/counter.php?id=' + CDFE.getCountdown().id;
+    safari.application.activeBrowserWindow.openTab().url = url;
+  }
+  if (event.command === 'showBadgeOnToolbar') {
+    safari.extension.settings.showBadge = !safari.extension.settings.showBadge;
+  }
+}
+
+function settingsChangEventHandler(event) {
+  for (var i in safari.extension.toolbarItems) {
+    safari.extension.toolbarItems[i].validate();
   }
 }
 
