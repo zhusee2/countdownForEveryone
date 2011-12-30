@@ -8,6 +8,7 @@ const CDPAGEPATTERN = /^http:\/\/timer.hugojay.com\/counter.php\?.*id=([^\&]+)/;
 safari.application.addEventListener('validate', validationHandler, false);
 safari.application.addEventListener('menu', menuValidator, false);
 safari.application.addEventListener('command', commandHandler, false);
+safari.application.addEventListener("message", respondToMessage, false);
 safari.extension.settings.addEventListener('change', settingsChangEventHandler, false);
  
 function validationHandler(event) {
@@ -101,6 +102,14 @@ function commandHandler(event) {
   }
   if (event.command === 'removeCountdown') {
     safari.extension.settings.countdownData = null;
+  }
+}
+
+function respondToMessage(event) {
+  if (event.name === 'setCurrentCountdown') {
+    if (CDFE.setCountdownWithURL(event.message)) {
+      // Do something animated to show working process
+    }
   }
 }
 
