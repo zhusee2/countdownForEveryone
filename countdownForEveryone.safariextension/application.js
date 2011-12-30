@@ -78,27 +78,17 @@ function menuValidator(event) {
 
 function commandHandler(event) {
   if (event.command === 'setNewCountdown') {
-    var url = prompt('請輸入您要使用的全民倒數計時器網址：', '範例：http://timer.hugojay.com/counter.php?id=Rvc'),
-        match = url.match(CDPAGEPATTERN);
+    var url = prompt('請輸入您要使用的全民倒數計時器網址：', '範例：http://timer.hugojay.com/counter.php?id=Rvc');
     
-    if (url) {
-      if (match) {
-        CDFE.setCountdown(match[1]);
-      } else {
-        alert('您輸入的格式錯誤，請檢查後再試一次。\n\n建議您開啟您要使用的全民倒數計時器網頁，並直接將網址複製後再回來貼上。')
-      }
+    if (!url || !CDFE.setCountdownWithURL(url)) {
+      alert('您輸入的格式錯誤，請檢查後再試一次。\n\n建議您開啟您要使用的全民倒數計時器網頁，並直接將網址複製後再回來貼上。')
     }
   }
   if (event.command === 'setCurrentCountdown') {
-    var url = safari.application.activeBrowserWindow.activeTab.url,
-        match = url.match(CDPAGEPATTERN);
+    var url = safari.application.activeBrowserWindow.activeTab.url;
     
-    if (url) {
-      if (match) {
-        CDFE.setCountdown(match[1]);
-      } else {
-        alert('設定失敗，請改使用手動輸入設定。')
-      }
+    if (!url || !CDFE.setCountdownWithURL(url)) {
+      alert('設定失敗，請改使用手動輸入設定。')
     }
   }
 
@@ -184,11 +174,23 @@ var CDFE = {
     $.post('http://timer.hugojay.com/ajax/cdtimer.php', {id: id}, function(data) {
       if (JSON.parse(data).response == 1) {
         safari.extension.settings.countdownData = data;
+        console.log('設定完成', data);
       } else {
         alert('找不到指定的倒數計時器，請檢查ID後再試一次。');
         return false;
       }
     });
+  },
+  setCountdownWithURL: function setCountdownWithURL(url) {
+    var match = url.match(CDPAGEPATTERN);
+    
+    if (match) {
+      this.setCountdown(match[1]);
+      return true;
+    } else {
+      console.error('無法設定倒數計時：傳入的網址錯誤。');
+      return false;
+    }
   }
 };
 
