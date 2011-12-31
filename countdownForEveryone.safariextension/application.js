@@ -108,8 +108,13 @@ function commandHandler(event) {
 function respondToMessage(event) {
   if (event.name === 'setCurrentCountdown') {
     if (CDFE.setCountdownWithURL(event.message)) {
-      // Do something animated to show working process
+      event.target.page.dispatchMessage('installResult', true);
+    } else {
+      event.target.page.dispatchMessage('installResult', false);
     }
+  }
+  if (event.name === 'getCurrentCountdown') {
+    event.target.page.dispatchMessage('currentCountdown', CDFE.getCountdown());
   }
 }
 
